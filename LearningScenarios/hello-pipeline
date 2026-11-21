@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: first-reva
+  annotations:
+    scenarios.ai.sap.com/description: "Introduction to SAP AI Core"
+    scenarios.ai.sap.com/name: "Tutorial"
+    executables.ai.sap.com/description: "Enhanced greeting with timestamp and resource plan"
+    executables.ai.sap.com/name: "Hello world Pipeline "
+  labels:
+    scenarios.ai.sap.com/id: "learning"
+    ai.sap.com/version: "2.0"
+spec:
+  entrypoint: mypipeline
+  arguments:
+    parameters:
+      - name: participant_name
+        value: "SAP AI Core User"
+  templates:
+    - name: mypipeline
+      steps:
+        - - name: greet
+            template: greeter
+            arguments:
+              parameters:
+                - name: participant_name
+                  value: "{{workflow.parameters.participant_name}}"
+    - name: greeter
+      metadata:
+        labels:
+          ai.sap.com/resourcePlan: starter
+      inputs:
+        parameters:
+          - name: participant_name
+      container:
+        image: docker.io/python:latest
+        command:
+          - python3
+          - '-c'
+        args:
+          - |
+            import datetime
+            import platform
+            name = "{{inputs.parameters.participant_name}}"
+            now  = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+            py   = platform.python_version()
+            node = platform.node()
+            print("=" * 55)
+            print(f"  Hello from SAP AI Core, {name}!")
+            print(f"  Execution time : {now}")
+            print(f"  Python version : {py}")
+            print(f"  Pod hostname   : {node}")
+            print(f"  Resource plan  : starter (1 CPU / 3 GB)")
+            print("=" * 55)
+            print("Pipeline version 2.0 - Enhanced Hello World")
