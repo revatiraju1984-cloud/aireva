@@ -4,7 +4,7 @@ metadata:
   name: first-reva
   annotations:
     scenarios.ai.sap.com/description: "Introduction to SAP AI Core"
-    scenarios.ai.sap.com/name: "Tutorial"
+    scenarios.ai.sap.com/name: "Tutorialreva"
     executables.ai.sap.com/description: "Enhanced greeting with timestamp and resource plan"
     executables.ai.sap.com/name: "Hello world Pipeline "
   labels:
