@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: hello-workflow-clrev01
+  annotations:
+    scenarios.ai.sap.com/name: "Hello World Lab clrev01"
+    scenarios.ai.sap.com/description: "Hello World training scenario"
+    executables.ai.sap.com/name: "Hello Batch Workflow clrev01"
+    executables.ai.sap.com/description: "Print a greeting and exit"
+  labels:
+    scenarios.ai.sap.com/id: "hello-world-clrev01"
+    ai.sap.com/version: "1.0"
+spec:
+  entrypoint: hello-pipelinerev01
+  templates:
+    - name: hello-pipelinerev01
+      steps:
+        - - name: say-hello
+            template: print-greeting
+    - name: print-greeting
+      container:
+        image: docker.io/library/python:3.11-slim
+        command: [python3, "-c"]
+        args:
+          - |
+            print("Hello from SAP AI Core workflow", flush=True)
